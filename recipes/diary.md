@@ -61,40 +61,36 @@ class Diary
   end
 
   def list_entries
-  # returns diary entries so the user can reflect on them
+  # returns diary contents so the user can reflect on them
   end
 
-  def reading_time(wpm)
-  #calculates the users reading time
-  end
-
-  def find_best_entry_for_reading_time(wpm, minutes)
-  # finds the best time to read
+  def count_words
+  #returns how many words are in a entry
   end
 
   def readable_entries(wpm, minutes)
-  #calculates what entries we can read
-  end
-
-  def extract_phone_numbers
-  #scans entries for phone numbers and returns the phone numbers
+  #calculates what contents we can read
   end
 end
 
 class DiaryEntry
-  def initialize(title, experience)
+  def initialize(title, contents)
   end
 
   def title
   #returns the diary title
   end
 
-  def experience
+  def contents
   #returns the diary experience
   end
 
   def count_words
   #returns how many words are in a entry
+  end
+
+  def reading_time(wpm)
+  #calculates the users reading time
   end
 end
 
@@ -112,15 +108,22 @@ class TodoList
   end
 end
 
+class Task
+
+  def initialize(task)
+  end
+
+  def title
+  end
+
+end
+
 class MyContacts
   def initialize
   end
 
-  def add(number)
-  end
-
-  def list
-  #lists peoples numbers from diary entries
+  def extract_phone_numbers
+  #scans contents for phone numbers and returns the phone numbers
   end
 end
 
@@ -132,6 +135,60 @@ _Create examples of the classes being used together in different situations and
 combinations that reflect the ways in which the system will be used._
 
 ```ruby
+#1
+
+diary = Diary.new
+diary_entry_1 = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+diary_entry_2 = DiaryEntry.new("title 2", "dear diary, my day went like this")
+diary.add(diary_entry_1)
+diary.add(diary_entry_2)
+expect(diary.all).to eq [diary_entry_1, diary_entry_2]
+
+#2
+
+diary = Diary.new
+diary_entry_1 = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+diary_entry_2 = DiaryEntry.new("title 2", "dear diary, my day went like this")
+diary.add(diary_entry_1)
+diary.add(diary_entry_2)
+expect(diary.word_count).to eq 12
+
+# 3
+
+diary = Diary.new
+diary_entry_1 = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+diary_entry_2 = DiaryEntry.new("title 2", "dear diary, my day went like this")
+diary.add(diary_entry_1)
+diary.add(diary_entry_2)
+expect(diary.readable_entries(5, 1)).to eq "dear diary, today I experiencied"
+expect(diary.readable_entries(7, 1)).to eq "dear diary, my day went like this"
+
+# 4
+
+diary = Diary.new
+diary_entry_1 = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+diary.add(diary_entry_1)
+expect{ diary.readable_entries(0, 1) }.to raise_error("WPM must be a positive.")
+
+
+# 5
+
+diary = Diary.new
+numbers = MyContacts.new
+diary_entry_1 = DiaryEntry.new("title 1", "Dave Smith 079000000001")
+diary_entry_2 = DiaryEntry.new("title 2", "Anna Davies 079000000002")
+contacts.add(diary_entry_1.extract_phone_numbers)
+contacts.add(diary_entry_2.extract_phone_numbers)
+expect(numbers.list).to eq ["079000000001", "079000000002"]
+
+# 6
+
+todo_list = TodoList.new
+task_1 = Todo.new("wash clothes")
+task_2 = Todo.new("do the shopping")
+todo_list.add(task_1)
+todo_list.add(task_2)
+expect(todo_list.list).to eq [task_1, task_2]
 
 ```
 
@@ -141,6 +198,32 @@ _Create examples, where appropriate, of the behaviour of each relevant class at
 a more granular level of detail._
 
 ```ruby
+# Diary
+
+# 1 
+diary = Diary.new
+expect(diary.list_entries).to eq []
+
+# Todo List
+
+# 1
+task = TodoList.new
+expect(task.list).to eq []
+
+
+#Diary Entry
+
+# 1
+entry = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+expect(entry.contents).to eq "dear diary, today I experiencied"
+
+# 2
+entry = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+expect(entry.count_words).to eq 5
+
+# 3
+entry = DiaryEntry.new("title 1", "dear diary, today I experiencied")
+expect(entry.reading_time(2)).to eq 2
 
 ```
 
